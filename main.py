@@ -51,6 +51,11 @@ def count_down(count):
         window.after(1000, count_down, count-1)
     else:
         start_timer()
+        global reps
+        marks = " "
+        for _ in range(math.floor(reps/2)):
+            marks += "✔"
+        checkmark_label.config(text = marks, fg=GREEN, bg=YELLOW, font=(FONT_NAME,35,'bold'))
 
 
 # ---------------------------- UI SETUP ------------------------------- #
@@ -69,11 +74,11 @@ timer_text = canvas.create_text(100,130,text="00:00",fill="white", font = (FONT_
 
 #----labels setup---#
 timer_label = Label(text = "Timer", fg=GREEN, bg=YELLOW, font=(FONT_NAME,50,'bold'))
-checkmark_label = Label(text = "✔", fg=GREEN, bg=YELLOW, font=(FONT_NAME,35,'bold'))
+checkmark_label = Label(text = "", fg=GREEN, bg=YELLOW, font=(FONT_NAME,35,'bold'))
 
 #----buttons setup---#
-start_button = Button(text="Start",width=5,height=2,font=(FONT_NAME,10,'bold'),command=start_timer)
-reset_button = Button(text="Reset",width=5,height=2,font=(FONT_NAME,10,'bold'))
+start_button = Button(text="Start",font=(FONT_NAME,10,'bold'),command=start_timer)
+reset_button = Button(text="Reset",font=(FONT_NAME,10,'bold'))
 
 #----grid setup----#
 #column 0
