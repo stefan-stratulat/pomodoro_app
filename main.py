@@ -11,8 +11,16 @@ SHORT_BREAK_MIN = 5
 LONG_BREAK_MIN = 20
 
 reps = 0
+timer = None
 
 # ---------------------------- TIMER RESET ------------------------------- #
+
+def reset_timer():
+    window.after_cancel(timer)
+    canvas.itemconfig(timer_text, text="00:00")
+    timer_label.config(text = "Timer")
+    checkmark_label.config(text = "")
+
 
 # ---------------------------- TIMER MECHANISM ------------------------------- #
 
@@ -27,15 +35,15 @@ def start_timer():
     #if it's the 8th rep:
     if reps % 8 == 0:
         count_down(long_break_sec)
-        timer_label.config(text = "Break", fg=RED, bg=YELLOW, font=(FONT_NAME,50,'bold'))
+        timer_label.config(text = "Break", fg=RED)
     #if it's the 2nd/4th/6th
     elif reps % 2 == 0:
         count_down(short_break_sec)
-        timer_label.config(text = "Break", fg=PINK, bg=YELLOW, font=(FONT_NAME,50,'bold'))
+        timer_label.config(text = "Break", fg=PINK)
     else:
     #if it's the 1st/3rd/5th/7th rep
         count_down(work_sec)
-        timer_label.config(text = "Work", fg=GREEN, bg=YELLOW, font=(FONT_NAME,50,'bold'))
+        timer_label.config(text = "Work", fg=GREEN)
 
 # ---------------------------- COUNTDOWN MECHANISM ------------------------------- #
 
@@ -48,10 +56,11 @@ def count_down(count):
 
     canvas.itemconfig(timer_text, text=f"{count_min}:{count_sec}")
     if count > 0:
-        window.after(1000, count_down, count-1)
+        global timer
+        timer = window.after(1000, count_down, count-1)
     else:
         start_timer()
-        global reps
+        #add a checkmark after each work session(work+break)
         marks = " "
         for _ in range(math.floor(reps/2)):
             marks += "✔"
@@ -78,7 +87,7 @@ checkmark_label = Label(text = "", fg=GREEN, bg=YELLOW, font=(FONT_NAME,35,'bold
 
 #----buttons setup---#
 start_button = Button(text="Start",font=(FONT_NAME,10,'bold'),command=start_timer)
-reset_button = Button(text="Reset",font=(FONT_NAME,10,'bold'))
+reset_button = Button(text="Reset",font=(FONT_NAME,10,'bold'),command=reset_timer)
 
 #----grid setup----#
 #column 0
